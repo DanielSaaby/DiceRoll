@@ -1,6 +1,10 @@
 package com.example.diceroll;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +16,10 @@ import android.widget.TextView;
 
 import com.example.diceroll.Model.Dice;
 import com.example.diceroll.Model.DiceGenerate;
+import com.example.diceroll.Model.DiceHistory;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     List<Dice> diceList;
     int[] imageRefs;
+
+    ArrayList<DiceHistory> diceHistoryList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 try
                 {
                     int valueSum = 0;
+                    Date timestamp = new Date();
+                    List<Dice> diceRolls = new ArrayList<>();
                     int numberOfDice = Integer.parseInt(numberDice.getText().toString().trim());
 
                     if(numberOfDice >= 1 && numberOfDice <=6)
@@ -65,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                                 if(dice.getDiceValue() == diceValue)
                                 {
                                     correspondingDice = dice;
-                                    Log.d("test", "onClick:"  + dice.getImage());
+                                    diceRolls.add(dice);
                                 }
                             }
 
@@ -74,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
                             imageView.setImageResource(correspondingDice.getImage());
 
                         }
+
+                        DiceHistory rollInfo = new DiceHistory(valueSum, timestamp, diceRolls);
+                        diceHistoryList.add(rollInfo);
 
                         txtOutput.setText(valueSum + "");
                         txtOutput.setTextColor(Color.parseColor("#000000"));
@@ -96,11 +110,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        Button btnHistory = this.findViewById(R.id.btnHistory);
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickGoToHistory();
+            }
+        });
+
+
 
 
 
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    private void onClickGoToHistory() {
+        Intent x = new Intent(MainActivity.this, HistoryActivity.class);
+        x.putExtra("history", diceHistoryList);
+        startActivityForResult(x, 1);
+    }
+
 
     private void resetDice() {
 
@@ -116,5 +151,23 @@ public class MainActivity extends AppCompatActivity {
         Random rng = new Random();
         int number = rng.nextInt(6)+1;
         return number;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (1) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String newText = data.getStringExtra("shouldDelete");
+
+                    if(newText.equals("yes"))
+                    {
+                        diceHistoryList.clear();
+                    }
+                }
+                break;
+            }
+        }
     }
 }
