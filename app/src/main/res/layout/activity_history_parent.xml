@@ -8,14 +8,10 @@
 
     <ListView
         android:id="@+id/diceRollList"
-        android:layout_width="395dp"
-        android:layout_height="300dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="350dp"
+        android:layout_height="532dp"
         android:stackFromBottom="true"
         android:transcriptMode="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,4 +26,5 @@
         android:text="CLEAR"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

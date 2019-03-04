@@ -89,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
                         DiceHistory rollInfo = new DiceHistory(valueSum, timestamp, diceRolls);
                         diceHistoryList.add(rollInfo);
 
-                        txtOutput.setText(valueSum + "");
+                        txtOutput.setText("Result: " + valueSum + "");
                         txtOutput.setTextColor(Color.parseColor("#000000"));
 
 
                     }
                     else
                     {
-                        txtOutput.setText("Please Enter a number between 1 & 6");
+                        txtOutput.setText("Between 1 & 6");
                         txtOutput.setTextColor(Color.parseColor("#DC143C"));
                     }
 
